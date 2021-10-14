@@ -1,0 +1,800 @@
+from tkinter import*
+import math
+import os
+import random
+from tkinter import messagebox
+import time
+import tempfile
+
+
+class Bill_App:
+    def __init__(self, root):
+        self.root = root
+        self.root.geometry("1920x1080+0+0")
+        self.root.title("billing software")
+        bg_color = "#CC3300"
+        title = Label(self.root, text="Billing Software", bd=12, relief=GROOVE,
+                      bg=bg_color, fg="black", font=("times new roman", 30, "bold"), padx=10, pady=1).pack(fill=X)
+
+# ****************************************************************************************VARIABLES
+
+    # *****************************************************************************************customer
+        self.c_name = StringVar()
+        self.c_phone = StringVar()
+        self.bike_num = StringVar()
+        self.bill_num = StringVar()
+        x = random.randint(1000, 9999)
+        self.bill_num.set(str(x))
+        self.search_bill = StringVar()
+    # ******************************************************************************************other
+        self.qty1 = IntVar()
+        self.rate1 = IntVar()
+        self.dis1 = IntVar()
+        self.amnt1 = IntVar()
+        self.item_name1 = StringVar()
+
+        self.qty2 = IntVar()
+        self.rate2 = IntVar()
+        self.dis2 = IntVar()
+        self.amnt2 = IntVar()
+        self.item_name2 = StringVar()
+
+        self.qty3 = IntVar()
+        self.rate3 = IntVar()
+        self.dis3 = IntVar()
+        self.amnt3 = IntVar()
+        self.item_name3 = StringVar()
+
+        self.qty4 = IntVar()
+        self.rate4 = IntVar()
+        self.dis4 = IntVar()
+        self.amnt4 = IntVar()
+        self.item_name4 = StringVar()
+
+        self.qty5 = IntVar()
+        self.rate5 = IntVar()
+        self.dis5 = IntVar()
+        self.amnt5 = IntVar()
+        self.item_name5 = StringVar()
+
+        self.qty6 = IntVar()
+        self.rate6 = IntVar()
+        self.dis6 = IntVar()
+        self.amnt6 = IntVar()
+        self.item_name6 = StringVar()
+
+        self.fnl_tot = StringVar()
+        self.bill_fnl = IntVar()
+        self.fnl_tot_dis = StringVar()
+        self.dy_end_tot = float()
+
+        self.qty1.set(1)
+        self.qty2.set(1)
+        self.qty3.set(1)
+        self.qty4.set(1)
+        self.qty5.set(1)
+        self.qty6.set(1)
+
+
+# *****************************************************************************customer details frame
+        F1 = LabelFrame(self.root, text="customer details", bd=2, font=(
+            "times new roman", 15, "bold"), fg="gold", bg=bg_color)
+        F1.place(x=0, y=73, relwidth=1)
+
+        cname_lbl = Label(F1, text="Cus Name", bg=bg_color, fg="white", font=(
+            "time new roman", 15, "bold")).grid(row=0, column=0, padx=20, pady=4, sticky='w')
+        cname_txt = Entry(F1, width=20, textvariable=self.c_name, font="arial 15", bd=4, relief=SUNKEN).grid(
+            row=0, column=1, padx=0, pady=0)
+
+        c_bike_num_lbl = Label(F1, text="Bike Num.", bg=bg_color, fg="white", font=(
+            "time new roman", 15, "bold")).grid(row=0, column=2, padx=20, pady=4)
+        c_bike_num_txt = Entry(F1, width=11, textvariable=self.bike_num, font="arial 15", bd=7, relief=SUNKEN).grid(
+            row=0, column=3, padx=0, pady=5)
+
+        cphne_lbl = Label(F1, text="Cus Phone No.", bg=bg_color, fg="white", font=(
+            "time new roman", 15, "bold")).grid(row=0, column=4, padx=20, pady=4)
+        cphne_txt = Entry(F1, width=11, textvariable=self.c_phone, font="arial 15", bd=7, relief=SUNKEN).grid(
+            row=0, column=5, padx=10, pady=5)
+
+        c_bill_num_lbl = Label(F1, text="Bill Num.", bg=bg_color, fg="white", font=(
+            "time new roman", 15, "bold")).grid(row=0, column=6, padx=20, pady=4)
+        c_bill_num_txt = Entry(F1, width=15, textvariable=self.search_bill, font="arial 15", bd=7, relief=SUNKEN).grid(
+            row=0, column=7, padx=10, pady=5)
+
+        bill_btn = Button(F1, command=self.find_bill, text="search", width=10, bd=7, font="arial 12 bold").grid(
+            row=0, column=8, padx=30, pady=2)
+
+ # ***************
+
+        F2 = LabelFrame(self.root, text="items", bd=0, font=(
+            "times new roman", 15, "bold"), fg="gold", bg=bg_color)
+        F2.place(x=0, y=150, width=768, height=659.3)
+
+        name_lbla1 = Label(F2, text="ITEM NAME", bg=bg_color, fg="white", font=(
+            "time new roman", 12, "bold")).grid(row=0, column=1, padx=0, pady=4)
+        name_txta1 = Entry(F2, width=37, textvariable=self.item_name1, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=1, column=1, padx=3, pady=.5)
+
+        qty_lbla1 = Label(F2, text="QTY", bg=bg_color, fg="white", font=(
+            "time new roman", 12, "bold")).grid(row=0, column=2, padx=0, pady=4)
+        qty_txta1 = Entry(F2, width=8, textvariable=self.qty1, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=1, column=2, padx=3, pady=.5)
+
+        rate_lbla1 = Label(F2, text="RATE", bg=bg_color, fg="white", font=(
+            "time new roman", 12, "bold")).grid(row=0, column=3, padx=0, pady=4)
+        rate_txta1 = Entry(F2, width=10, textvariable=self.rate1, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=1, column=3, padx=3, pady=.5)
+
+        dis_lbla1 = Label(F2, text="DIS(RS)", bg=bg_color, fg="white", font=(
+            "time new roman", 12, "bold")).grid(row=0, column=4, padx=0, pady=4)
+        dis_txta1 = Entry(F2, width=10, textvariable=self.dis1, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=1, column=4, padx=3, pady=.5)
+
+        amnt_lbla1 = Label(F2, text="AMOUNT", bg=bg_color, fg="white", font=(
+            "time new roman", 12, "bold")).grid(row=0, column=5, padx=0, pady=4)
+        amnt_txta1 = Entry(F2, width=11, textvariable=self.amnt1, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=1, column=5, padx=3, pady=.5)
+   # ****************************************************************************************2nd row
+
+        name_txta2 = Entry(F2, width=37, textvariable=self.item_name2, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=2, column=1, padx=3, pady=.5)
+        qty_txta2 = Entry(F2, width=8, textvariable=self.qty2, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=2, column=2, padx=3, pady=.5)
+
+        rate_txta2 = Entry(F2, width=10, textvariable=self.rate2, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=2, column=3, padx=3, pady=.5)
+
+        dis_txta2 = Entry(F2, width=10, textvariable=self.dis2, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=2, column=4, padx=3, pady=.5)
+
+        amnt_txta2 = Entry(F2, width=11, textvariable=self.amnt2, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=2, column=5, padx=3, pady=.5)
+
+# ****************************************************************************************3rd row
+
+        name_txta3 = Entry(F2, width=37, textvariable=self.item_name3, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=3, column=1, padx=3, pady=.5)
+
+        qty_txta3 = Entry(F2, width=8, textvariable=self.qty3, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=3, column=2, padx=3, pady=.5)
+
+        rate_txta3 = Entry(F2, width=10, textvariable=self.rate3, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=3, column=3, padx=3, pady=.5)
+
+        dis_txta3 = Entry(F2, width=10, textvariable=self.dis3, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=3, column=4, padx=3, pady=.5)
+
+        amnt_txta3 = Entry(F2, width=11, textvariable=self.amnt3, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=3, column=5, padx=3, pady=.5)
+
+# ****************************************************************************************4th row
+
+        name_txta4 = Entry(F2, width=37, textvariable=self.item_name4, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=4, column=1, padx=3, pady=.5)
+
+        qty_txta4 = Entry(F2, width=8, textvariable=self.qty4, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=4, column=2, padx=3, pady=.5)
+
+        rate_txta4 = Entry(F2, width=10, textvariable=self.rate4, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=4, column=3, padx=3, pady=.5)
+
+        dis_txta4 = Entry(F2, width=10, textvariable=self.dis4, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=4, column=4, padx=3, pady=.5)
+
+        amnt_txta4 = Entry(F2, width=11, textvariable=self.amnt4, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=4, column=5, padx=3, pady=.5)
+
+ # ****************************************************************************************5th drow
+
+        name_txta5 = Entry(F2, width=37, textvariable=self.item_name5, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=5, column=1, padx=3, pady=.5)
+
+        qty_txta5 = Entry(F2, width=8, textvariable=self.qty5, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=5, column=2, padx=3, pady=.5)
+
+        rate_txta5 = Entry(F2, width=10, textvariable=self.rate5, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=5, column=3, padx=3, pady=.5)
+
+        dis_txta5 = Entry(F2, width=10, textvariable=self.dis5, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=5, column=4, padx=3, pady=.5)
+
+        amnt_txta5 = Entry(F2, width=11, textvariable=self.amnt5, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=5, column=5, padx=3, pady=.5)
+
+ # ***************************************************************************************6th drow
+
+        name_txta = Entry(F2, width=37, textvariable=self.item_name6, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=6, column=1, padx=3, pady=.5)
+
+        qty_txta = Entry(F2, width=8, textvariable=self.qty6, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=6, column=2, padx=3, pady=.5)
+
+        rate_txta = Entry(F2, width=10, textvariable=self.rate6, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=6, column=3, padx=3, pady=.5)
+
+        dis_txta = Entry(F2, width=10, textvariable=self.dis6, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=6, column=4, padx=3, pady=.5)
+
+        amnt_txta = Entry(F2, width=11, textvariable=self.amnt6, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=6, column=5, padx=3, pady=.5)
+
+ # ****************************************************************************************7th row
+
+        name_txta = Entry(F2, width=37, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=7, column=1, padx=3, pady=.5)
+
+        qty_txta = Entry(F2, width=8, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=7, column=2, padx=3, pady=.5)
+
+        rate_txta = Entry(F2, width=10, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=7, column=3, padx=3, pady=.5)
+
+        dis_txta = Entry(F2, width=10, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=7, column=4, padx=3, pady=.5)
+
+        amnt_txta = Entry(F2, width=11, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=7, column=5, padx=3, pady=.5)
+
+ # ****************************************************************************************8th row
+
+        name_txta = Entry(F2, width=37, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=8, column=1, padx=3, pady=.5)
+
+        qty_txta = Entry(F2, width=8, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=8, column=2, padx=3, pady=.5)
+
+        rate_txta = Entry(F2, width=10, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=8, column=3, padx=3, pady=.5)
+
+        dis_txta = Entry(F2, width=10, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=8, column=4, padx=3, pady=.5)
+
+        amnt_txta = Entry(F2, width=11, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=8, column=5, padx=3, pady=.5)
+
+ # ****************************************************************************************9th row
+
+        name_txta = Entry(F2, width=37, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=9, column=1, padx=3, pady=.5)
+
+        qty_txta = Entry(F2, width=8, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=9, column=2, padx=3, pady=.5)
+
+        rate_txta = Entry(F2, width=10, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=9, column=3, padx=3, pady=.5)
+
+        dis_txta = Entry(F2, width=10, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=9, column=4, padx=3, pady=.5)
+
+        amnt_txta = Entry(F2, width=11, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=9, column=5, padx=3, pady=.5)
+
+ # ****************************************************************************************10th row
+
+        name_txta = Entry(F2, width=37, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=10, column=1, padx=3, pady=.5)
+
+        qty_txta = Entry(F2, width=8, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=10, column=2, padx=3, pady=.5)
+
+        rate_txta = Entry(F2, width=10, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=10, column=3, padx=3, pady=.5)
+
+        dis_txta = Entry(F2, width=10, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=10, column=4, padx=3, pady=.5)
+
+        amnt_txta = Entry(F2, width=11, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=10, column=5, padx=3, pady=.5)
+
+ # ****************************************************************************************11th row
+
+        name_txta = Entry(F2, width=37, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=11, column=1, padx=3, pady=.5)
+
+        qty_txta = Entry(F2, width=8, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=11, column=2, padx=3, pady=.5)
+
+        rate_txta = Entry(F2, width=10, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=11, column=3, padx=3, pady=.5)
+
+        dis_txta = Entry(F2, width=10, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=11, column=4, padx=3, pady=.5)
+
+        amnt_txta = Entry(F2, width=11, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=11, column=5, padx=3, pady=.5)
+
+ # ****************************************************************************************12th row
+
+        name_txta = Entry(F2, width=37, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=12, column=1, padx=3, pady=.5)
+
+        qty_txta = Entry(F2, width=8, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=12, column=2, padx=3, pady=.5)
+
+        rate_txta = Entry(F2, width=10, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=12, column=3, padx=3, pady=.5)
+
+        dis_txta = Entry(F2, width=10, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=12, column=4, padx=3, pady=.5)
+
+        amnt_txta = Entry(F2, width=11, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=12, column=5, padx=3, pady=.5)
+
+ # ****************************************************************************************13th row
+
+        name_txta = Entry(F2, width=37, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=13, column=1, padx=3, pady=.5)
+
+        qty_txta = Entry(F2, width=8, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=13, column=2, padx=3, pady=.5)
+
+        rate_txta = Entry(F2, width=10, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=13, column=3, padx=3, pady=.5)
+
+        dis_txta = Entry(F2, width=10, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=13, column=4, padx=3, pady=.5)
+
+        amnt_txta = Entry(F2, width=11, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=13, column=5, padx=3, pady=.5)
+
+ # ****************************************************************************************14th row
+
+        name_txta = Entry(F2, width=37, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=14, column=1, padx=3, pady=.5)
+
+        qty_txta = Entry(F2, width=8, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=14, column=2, padx=3, pady=.5)
+
+        rate_txta = Entry(F2, width=10, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=14, column=3, padx=3, pady=.5)
+
+        dis_txta = Entry(F2, width=10, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=14, column=4, padx=3, pady=.5)
+
+        amnt_txta = Entry(F2, width=11, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=14, column=5, padx=3, pady=.5)
+
+ # ****************************************************************************************15th row
+
+        name_txta = Entry(F2, width=37, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=15, column=1, padx=3, pady=.5)
+
+        qty_txta = Entry(F2, width=8, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=15, column=2, padx=3, pady=.5)
+
+        rate_txta = Entry(F2, width=10, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=15, column=3, padx=3, pady=.5)
+
+        dis_txta = Entry(F2, width=10, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=15, column=4, padx=3, pady=.5)
+
+        amnt_txta = Entry(F2, width=11, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=15, column=5, padx=3, pady=.5)
+
+ # ****************************************************************************************16th row
+
+        name_txta = Entry(F2, width=37, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=16, column=1, padx=3, pady=.5)
+
+        qty_txta = Entry(F2, width=8, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=16, column=2, padx=3, pady=.5)
+
+        rate_txta = Entry(F2, width=10, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=16, column=3, padx=3, pady=.5)
+
+        dis_txta = Entry(F2, width=10, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=16, column=4, padx=3, pady=.5)
+
+        amnt_txta = Entry(F2, width=11, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=16, column=5, padx=3, pady=.5)
+
+ # ****************************************************************************************17th row
+
+        name_txta = Entry(F2, width=37, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=17, column=1, padx=3, pady=.5)
+
+        qty_txta = Entry(F2, width=8, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=17, column=2, padx=3, pady=.5)
+
+        rate_txta = Entry(F2, width=10, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=17, column=3, padx=3, pady=.5)
+
+        dis_txta = Entry(F2, width=10, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=17, column=4, padx=3, pady=.5)
+
+        amnt_txta = Entry(F2, width=11, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=17, column=5, padx=3, pady=.5)
+
+ # ****************************************************************************************18th row
+
+        name_txta = Entry(F2, width=37, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=18, column=1, padx=3, pady=.5)
+
+        qty_txta = Entry(F2, width=8, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=18, column=2, padx=3, pady=.5)
+
+        rate_txta = Entry(F2, width=10, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=18, column=3, padx=3, pady=.5)
+
+        dis_txta = Entry(F2, width=10, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=18, column=4, padx=3, pady=.5)
+
+        amnt_txta = Entry(F2, width=11, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=18, column=5, padx=3, pady=.5)
+
+ # ****************************************************************************************19th row
+
+        name_txta = Entry(F2, width=37, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=19, column=1, padx=3, pady=.5)
+
+        qty_txta = Entry(F2, width=8, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=19, column=2, padx=3, pady=.5)
+
+        rate_txta = Entry(F2, width=10, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=19, column=3, padx=3, pady=.5)
+
+        dis_txta = Entry(F2, width=10, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=19, column=4, padx=3, pady=.5)
+
+        amnt_txta = Entry(F2, width=11, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=19, column=5, padx=3, pady=.5)
+
+ # ****************************************************************************************20th row
+
+        name_txta = Entry(F2, width=37, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=20, column=1, padx=3, pady=.5)
+
+        qty_txta = Entry(F2, width=8, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=20, column=2, padx=3, pady=.5)
+
+        rate_txta = Entry(F2, width=10, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=20, column=3, padx=3, pady=.5)
+
+        dis_txta = Entry(F2, width=10, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=20, column=4, padx=3, pady=.5)
+
+        amnt_txta = Entry(F2, width=11, font="arial 13", bd=2, relief=SUNKEN).grid(
+            row=20, column=5, padx=3, pady=.5)
+
+# *****************************************************************************************bill area
+
+        F3 = Frame(self.root, bd=10, relief=GROOVE)
+        F3.place(x=770, y=150, width=768, height=600)
+        bill_title = Label(
+            F3, text="Bill Area", font="arial 15 bold", bd=5, relief=GROOVE).pack(fill=X)
+        scrol_y = Scrollbar(F3, orient=VERTICAL)
+        self.txtarea = Text(F3, font="arial 9",
+                            yscrollcommand=scrol_y.set)
+        scrol_y.pack(side=RIGHT, fill=Y)
+        scrol_y.config(command=self.txtarea.yview)
+        self.txtarea.pack(fill=BOTH, expand=1)
+
+# *****************************************************************************************button frame
+
+        F4 = LabelFrame(self.root, text="", relief=GROOVE, bd=5, font=(
+            "times new roman", 15, "bold"), fg="gold", bg=bg_color)
+        F4.place(x=0, y=750, width=1536, height=62)
+        final_tot_lbl = Label(F4, text="Final Total", bg=bg_color, fg="white", font=(
+            "time new roman", 15, "bold")).grid(row=0, column=0, padx=20, pady=4)
+        final_tot_txt = Entry(F4, width=15, textvariable=self.fnl_tot, font="arial 15 bold", bd=7, relief=SUNKEN).grid(
+            row=0, column=1, padx=10, pady=5)
+        day_end_tot = Entry(F4, width=15, textvariable=self.fnl_tot_dis, font="arial 15 bold", bd=7, relief=SUNKEN).grid(
+            row=0, column=2, padx=10, pady=5)
+
+        btn_F = Frame(F4, bd=5, relief=GROOVE)
+        btn_F.place(x=770, width=768, height=62)
+
+        total = Button(btn_F, command=self.amount, text="TOTAL", bg="black", fg="white", bd=0, pady=6,
+                       width=15, height=0, font="arial 15 bold").grid(row=0, column=0, padx=3, pady=0)
+        prnt = Button(btn_F, command=self.print_out, text="Print Bill", bg="black", fg="white", bd=0, pady=6,
+                      width=15, height=0, font="arial 15 bold").grid(row=0, column=1, padx=3, pady=0)
+        clear_btn = Button(btn_F, command=self.clear_data, text="CLEAR", bg="black", fg="white", bd=0, pady=6,
+                           width=15,  height=0, font="arial 15 bold").grid(row=0, column=2, padx=3, pady=0)
+        exit_btn = Button(btn_F, command=self.exit_bill, text="EXIT", bg="black", fg="white", bd=0, pady=6,
+                          width=14, height=0, font="arial 15 bold").grid(row=0, column=3, padx=3, pady=0)
+
+# **************************************************************************************************************all amount
+
+    def amount(self):
+
+        self.amount1 = float(
+            ((self.qty1.get()*self.rate1.get()) - self.dis1.get()))
+        self.amount2 = float(
+            ((self.qty2.get()*self.rate2.get()) - self.dis2.get()))
+        self.amount3 = float(
+            ((self.qty3.get()*self.rate3.get()) - self.dis3.get()))
+        self.amount4 = float(
+            ((self.qty4.get()*self.rate4.get()) - self.dis4.get()))
+        self.amount5 = float(
+            ((self.qty5.get()*self.rate5.get()) - self.dis5.get()))
+        self.amount6 = float(
+            ((self.qty6.get()*self.rate6.get()) - self.dis6.get()))
+
+        if self.rate1.get() <= 0:
+            messagebox.showerror("Error", "Please Enter AMOUNT")
+        else:
+            self.amnt1.set(self.amount1)
+            self.amnt2.set(self.amount2)
+            self.amnt3.set(self.amount3)
+            self.amnt4.set(self.amount4)
+            self.amnt5.set(self.amount5)
+            self.amnt6.set(self.amount6)
+
+            self.all_ammount = self.amount1+self.amount2 + \
+                self.amount3+self.amount4+self.amount5+self.amount6
+            self.dy_end_tot = self.dy_end_tot + self.all_ammount
+
+            self.fnl_tot.set(
+                "Rs: "+str(self.all_ammount))
+
+            pm = messagebox.askyesno("Payment Method", "Is This CASH Payment?")
+            if pm > 0:
+                self.pay_method = "CASH"
+            else:
+                self.pay_method = "CARD"
+
+            self.bill_fnl.set(
+                str(self.all_ammount))
+
+            self.fnl_tot_dis.set(
+                "Rs: "+str(self.dy_end_tot))
+
+            self.edate = time.strftime("%d/%m/%y")
+            self.etime = time.strftime("%H:%M:%S")
+
+            self.txtarea.delete('1.0', END)
+
+            self.txtarea.insert(
+                END, "\t\t\t\t\t JOE BROTHERS\n")
+            self.txtarea.insert(
+                END, "\t\t\t      Anagarika Dharmapala Mw,Nupe Matara\n")
+            self.txtarea.insert(
+                END, "\t\t Jayamaha Vihara Mw,Thotamuna Matara | Akuressa Rd,Nupe Matara\n")
+            self.txtarea.insert(
+                END, "\t\t\t\t Tel: 0412235554 | 0714336510\n")
+            self.txtarea.insert(
+                END, "\t\t\t\t Sales | Service | Spare Parts\n")
+            self.txtarea.insert(
+                END, "\t\t\t      (Stafford Motors Authorized Dealer)\n")
+
+            self.blank_sp1 = "\t\t\t\t\t\t"
+            self.blank_sp2 = "\t\t\t\t\t"
+            self.blank_sp3 = "\t\t\t\t"
+            self.blank_sp4 = "\t\t\t"
+            self.blank_sp5 = "\t\t"
+
+            self.c_name_length = len(self.c_name.get())
+            if self.c_name_length >= 31:
+                self.q1 = self.c_name.get() + self.blank_sp5
+            elif self.c_name_length >= 23:
+                self.q1 = self.c_name.get() + self.blank_sp4
+            elif self.c_name_length >= 15:
+                self.q1 = self.c_name.get() + self.blank_sp3
+            elif self.c_name_length >= 7:
+                self.q1 = self.c_name.get() + self.blank_sp2
+            else:
+                self.q1 = self.c_name.get() + self.blank_sp1
+
+            self.Bike_num_lenght = len(self.bike_num.get())
+            if self.Bike_num_lenght >= 7:
+                self.r1 = self.bike_num.get() + self.blank_sp2
+            else:
+                self.r1 = self.bike_num.get() + self.blank_sp1
+
+            self.txtarea.insert(
+                END, f"\nBill Number : {self.bill_num.get()} \t\t\t\t\t\t\t\tDate: {self.edate}")
+            self.txtarea.insert(
+                END, f"\nCustomer Name  : {self.q1[:50]}\t\tTime: {self.etime}")
+            self.txtarea.insert(
+                END, f"\nPhone Number : {self.c_phone.get()}")
+            self.txtarea.insert(
+                END, f"\nBike Number : {self.r1[:50]}\t\t\t{self.pay_method[:4]}")
+            self.txtarea.insert(
+                END, f"\n===============================================================================================")
+            self.txtarea.insert(
+                END, f"\nItem Name\t\t\t\t\tQTY\t\tRATE\t\tAMOUNT")
+            self.txtarea.insert(
+                END, f"\n===============================================================================================")
+
+            self.blank_sp1 = "\t\t\t\t\t\t"
+            self.blank_sp2 = "\t\t\t\t\t"
+            self.blank_sp3 = "\t\t\t\t"
+            self.blank_sp4 = "\t\t\t"
+            self.blank_sp5 = "\t\t"
+
+            self.item_length = len(self.item_name1.get())
+            if self.item_length >= 32:
+                self.p1 = self.item_name1.get() + self.blank_sp5
+            elif self.item_length >= 24:
+                self.p1 = self.item_name1.get() + self.blank_sp4
+            elif self.item_length >= 16:
+                self.p1 = self.item_name1.get() + self.blank_sp3
+            elif self.item_length >= 8:
+                self.p1 = self.item_name1.get() + self.blank_sp2
+            else:
+                self.p1 = self.item_name1.get() + self.blank_sp1
+            if self.rate1.get() != 0:
+                self.txtarea.insert(
+                    END,  f"\n{self.p1[:50]}{self.qty1.get()}\t\t{self.rate1.get()}\t\t{int(self.amnt1.get())}")
+
+            self.item_length = len(self.item_name2.get())
+            if self.item_length >= 32:
+                self.p2 = self.item_name2.get() + self.blank_sp5
+            elif self.item_length >= 24:
+                self.p2 = self.item_name2.get() + self.blank_sp4
+            elif self.item_length >= 16:
+                self.p2 = self.item_name2.get() + self.blank_sp3
+            elif self.item_length >= 8:
+                self.p2 = self.item_name2.get() + self.blank_sp2
+            else:
+                self.p2 = self.item_name2.get() + self.blank_sp1
+            if self.rate2.get() != 0:
+                self.txtarea.insert(
+                    END, f"\n{self.p2[:50]}{self.qty2.get()}\t\t{self.rate2.get()}\t\t{int(self.amnt2.get())}")
+
+            self.item_length = len(self.item_name3.get())
+            if self.item_length >= 32:
+                self.p3 = self.item_name3.get() + self.blank_sp5
+            elif self.item_length >= 24:
+                self.p3 = self.item_name3.get() + self.blank_sp4
+            elif self.item_length >= 16:
+                self.p3 = self.item_name3.get() + self.blank_sp3
+            elif self.item_length >= 8:
+                self.p3 = self.item_name3.get() + self.blank_sp2
+            else:
+                self.p3 = self.item_name3.get() + self.blank_sp1
+            if self.rate3.get() != 0:
+                self.txtarea.insert(
+                    END, f"\n{self.p3[:50]}{self.qty3.get()}\t\t{self.rate3.get()}\t\t{int(self.amnt3.get())}")
+
+            self.item_length = len(self.item_name4.get())
+            if self.item_length >= 32:
+                self.p4 = self.item_name4.get() + self.blank_sp5
+            elif self.item_length >= 24:
+                self.p4 = self.item_name4.get() + self.blank_sp4
+            elif self.item_length >= 16:
+                self.p4 = self.item_name4.get() + self.blank_sp3
+            elif self.item_length >= 8:
+                self.p4 = self.item_name4.get() + self.blank_sp2
+            else:
+                self.p4 = self.item_name4.get() + self.blank_sp1
+            if self.rate3.get() != 0:
+                self.txtarea.insert(
+                    END, f"\n{self.p4[:50]}{self.qty4.get()}\t\t{self.rate4.get()}\t\t{int(self.amnt4.get())}")
+
+            self.item_length = len(self.item_name5.get())
+            if self.item_length >= 32:
+                self.p5 = self.item_name5.get() + self.blank_sp5
+            elif self.item_length >= 24:
+                self.p5 = self.item_name5.get() + self.blank_sp4
+            elif self.item_length >= 16:
+                self.p5 = self.item_name5.get() + self.blank_sp3
+            elif self.item_length >= 8:
+                self.p5 = self.item_name5.get() + self.blank_sp2
+            else:
+                self.p5 = self.item_name5.get() + self.blank_sp1
+            if self.rate5.get() != 0:
+                self.txtarea.insert(
+                    END, f"\n{self.p5[:50]}{self.qty5.get()}\t\t{self.rate5.get()}\t\t{int(self.amnt5.get())}")
+
+            self.item_length = len(self.item_name6.get())
+            if self.item_length >= 32:
+                self.p6 = self.item_name6.get() + self.blank_sp5
+            elif self.item_length >= 24:
+                self.p6 = self.item_name6.get() + self.blank_sp4
+            elif self.item_length >= 16:
+                self.p6 = self.item_name6.get() + self.blank_sp3
+            elif self.item_length >= 8:
+                self.p6 = self.item_name6.get() + self.blank_sp2
+            else:
+                self.p6 = self.item_name6.get() + self.blank_sp1
+            if self.rate6.get() != 0:
+                self.txtarea.insert(
+                    END, f"\n{self.p6[:50]}{self.qty6.get()}\t\t{self.rate6.get()}\t\t{int(self.amnt6.get())}")
+
+            self.txtarea.insert(
+                END, f"\n\n \t\t\t\t\t\t\t\t-------------------------------")
+            self.txtarea.insert(
+                END, f"\n .............. \t .............\t\t\t\ttotal\t\tRs: {int(self.bill_fnl.get())}"+".00")
+            self.txtarea.insert(
+                END, f"\n Authorized sign \t Customer Sign \t\t\t\t===============================")
+            self.save_bill()
+
+    def save_bill(self):
+
+        self.bill_data = self.txtarea.get('1.0', END)
+        f2 = open("save/"+str(self.bill_num.get())+".txt", "w")
+        f2.write(self.bill_data)
+        f2.close()
+        messagebox.showinfo(
+            "saved", f"Bill no. : {self.bill_num.get()} saved seccessfully")
+
+    def find_bill(self):
+        present = "no"
+        for i in os.listdir("save/"):
+            if i.split('.')[0] == self.search_bill.get():
+                f2 = open(f"save/{i}", "r")
+                self.txtarea.delete('1.0', END)
+                for d in f2:
+                    self.txtarea.insert(END, d)
+                f2.close()
+                present = "yes"
+        if present == "no":
+            messagebox.showerror("Error", "Invalid Bill No.")
+
+    def clear_data(self):
+
+        if self.amnt1.get() <= 0:
+            messagebox.showerror("Error", "your bill already has been cleaned")
+        else:
+
+            op = messagebox.askyesno("Clear", "Do you want to clear Data")
+            if op > 0:
+
+                self.c_name.set("")
+                self.c_phone.set("")
+                self.bike_num.set("")
+                self.bill_num.set("")
+                x = random.randint(1000, 9999)
+                self.bill_num.set(str(x))
+                self.search_bill.set("")
+
+                self.qty1.set(1)
+                self.rate1.set(0)
+                self.dis1.set(0)
+                self.amnt1.set(0)
+                self.item_name1.set("")
+
+                self.qty2.set(1)
+                self.rate2.set(0)
+                self.dis2.set(0)
+                self.amnt2.set(0)
+                self.item_name2.set("")
+
+                self.qty3.set(1)
+                self.rate3.set(0)
+                self.dis3.set(0)
+                self.amnt3.set(0)
+                self.item_name3.set("")
+
+                self.qty4.set(1)
+                self.rate4.set(0)
+                self.dis4.set(0)
+                self.amnt4.set(0)
+                self.item_name4.set("")
+
+                self.qty5.set(1)
+                self.rate5.set(0)
+                self.dis5.set(0)
+                self.amnt5.set(0)
+                self.item_name5.set("")
+
+                self.qty6.set(1)
+                self.rate6.set(0)
+                self.dis6.set(0)
+                self.amnt6.set(0)
+                self.item_name6.set("")
+
+                self.fnl_tot.set("")
+
+    def exit_bill(self):
+        op = messagebox.askyesno("Exit", "Do you want to Exit from Bill App?")
+        if op > 0:
+            op = messagebox.askyesno(
+                "Exit", "Do you *Realy* want to Exit from Bill App?")
+            if op > 0:
+                self.root.destroy()
+
+    def print_out(self):
+        if self.amnt1.get() <= 0:
+            messagebox.showerror("Error", "Please Enter AMOUNT")
+        else:
+            d = self.txtarea.get("1.0", END)
+            temfile = tempfile.mktemp(".txt")
+            open(temfile, "w").write(d)
+            os.startfile(temfile, "print")
+
+
+root = Tk()
+obj = Bill_App(root)
+root.mainloop()
